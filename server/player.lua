@@ -743,6 +743,14 @@ function CreatePlayer(playerData, Offline)
         UpdatePlayerData(self.PlayerData.source)
     end
 
+    function self.Functions.SyncMoney()
+        local money = exports.pefcl:getDefaultAccountBalance(self.PlayerData.source).data
+        self.PlayerData.money['bank'] = money
+        if not self.Offline then
+            UpdatePlayerData(self.PlayerData.source)
+        end
+    end
+    
     ---@deprecated use SetJob instead
     ---Overwrites current primary job with a new job. Removing the player from their current primary job
     ---@param jobName string name
