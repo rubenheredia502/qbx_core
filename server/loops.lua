@@ -27,21 +27,20 @@ local function pay(player)
     local payment = GetJob(job.name).grades[job.grade.level].payment or job.payment
     if payment <= 0 then return end
     if not GetJob(job.name).offDutyPay and not job.onduty then return end
+
     if not config.money.paycheckSociety then
-        config.sendPaycheck(player, payment)
+        exports.pefcl:addBankBalance(player.PlayerData.source, { amount = payment, message = 'PAYCHECK' })
         return
     end
-    local account = config.getSocietyAccount(job.name)
-    if not account then -- Checks if player is employed by a society
-        config.sendPaycheck(player, payment)
-        return
-    end
-    if account < payment then -- Checks if company has enough money to pay society
+
+    local societyBalance = exports.pefcl:getTotalBankBalanceByIdentifier(player.PlayerData.source, job.name)
+    if not societyBalance or societyBalance < payment then
         Notify(player.PlayerData.source, locale('error.company_too_poor'), 'error')
         return
     end
-    config.removeSocietyMoney(job.name, payment)
-    config.sendPaycheck(player, payment)
+
+    exports.pefcl:removeBankBalanceByIdentifier(player.PlayerData.source, { identifier = job.name, amount = payment, message = 'RETIRADA' })
+    exports.pefcl:addBankBalance(player.PlayerData.source, { amount = payment, message = 'PAYCHECK' })
 end
 
 CreateThread(function()
