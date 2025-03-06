@@ -115,14 +115,6 @@ return {
         return exports.qbx_vehiclekeys:GiveKeys(src, vehicle)
     end,
 
-    getSocietyAccount = function(accountName)
-        return exports['Renewed-Banking']:getAccountMoney(accountName)
-    end,
-
-    removeSocietyMoney = function(accountName, payment)
-        return exports['Renewed-Banking']:removeAccountMoney(accountName, payment)
-    end,
-
     ---Paycheck function
     ---@param player Player Player object
     ---@param payment number Payment amount
